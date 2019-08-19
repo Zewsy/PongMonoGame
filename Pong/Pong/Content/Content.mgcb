@@ -61,3 +61,9 @@
 /processorParam:TextureFormat=Color
 /build:Pong_graphics/right_paddle.png
 
+#begin Pong_sound/beep.wav
+/importer:WavImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:Pong_sound/beep.wav
+

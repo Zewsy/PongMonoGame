@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -17,6 +18,7 @@ namespace Pong
         private Paddle upFrame;
         private Paddle downFrame;
         private Ball ball;
+        private SoundEffect beep;
         private const int MOVEMENT = 3;
 
         public Game1()
@@ -59,6 +61,7 @@ namespace Pong
             ball.texture = Content.Load<Texture2D>("Pong_graphics/ball");
             upFrame.texture = Content.Load<Texture2D>("Pong_graphics/frame");
             downFrame.texture = Content.Load<Texture2D>("Pong_graphics/frame");
+            beep = Content.Load<SoundEffect>("Pong_sound/beep");
 
             upFrame.X = 0;
             upFrame.Y = 0;
@@ -140,26 +143,35 @@ namespace Pong
             {
                 if (!leftPaddle.checkCollosion(ball))
                     this.Exit();
-                else
+                else {
+                    beep.Play();
                     ball.goesLeft = false;
+                }
+                    
             }
             else if (ball.X >= rightPaddle.X - rightPaddle.texture.Width / 2)
             {
                 if (!rightPaddle.checkCollosion(ball))
                     this.Exit();
                 else
+                {
+                    beep.Play();
                     ball.goesLeft = true;
+                }
+                    
             }
             else if (ball.Y - ball.texture.Height <= upFrame.Y)
             {
                 upFrame.hitBall(ball, true);
                 ball.goesDown = true;
+                beep.Play();
             }
 
             else if (ball.Y + ball.texture.Height / 2 >= downFrame.Y)
             {
                 downFrame.hitBall(ball, true);
                 ball.goesDown = false;
+                beep.Play();
             }
         }
     }
