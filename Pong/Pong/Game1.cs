@@ -12,9 +12,10 @@ namespace Pong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private Texture2D left_paddle;
-        private Texture2D right_paddle;
-        private Texture2D ball;
+        private Paddle leftPaddle;
+        private Paddle rightPaddle;
+        private Ball ball;
+        private const int MOVEMENT = 2;
 
         public Game1()
         {
@@ -31,6 +32,9 @@ namespace Pong
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+            leftPaddle = new Paddle();
+            rightPaddle = new Paddle();
+            ball = new Ball();
 
             base.Initialize();
         }
@@ -46,9 +50,16 @@ namespace Pong
 
             // TODO: use this.Content to load your game content here
 
-            left_paddle = Content.Load<Texture2D>("Pong_graphics/left_paddle");
-            right_paddle = Content.Load<Texture2D>("Pong_graphics/right_paddle");
-            ball = Content.Load<Texture2D>("Pong_graphics/ball");
+            leftPaddle.texture = Content.Load<Texture2D>("Pong_graphics/left_paddle");
+            rightPaddle.texture = Content.Load<Texture2D>("Pong_graphics/right_paddle");
+            ball.texture = Content.Load<Texture2D>("Pong_graphics/ball");
+
+            leftPaddle.X = 0;
+            leftPaddle.Y = graphics.PreferredBackBufferHeight / 2 - leftPaddle.texture.Height / 2;
+            rightPaddle.X = graphics.PreferredBackBufferWidth - rightPaddle.texture.Width;
+            rightPaddle.Y = graphics.PreferredBackBufferHeight / 2 - rightPaddle.texture.Height / 2;
+            ball.X = graphics.PreferredBackBufferWidth / 2;
+            ball.Y = graphics.PreferredBackBufferHeight / 2;
         }
 
         /// <summary>
@@ -67,10 +78,25 @@ namespace Pong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
 
             // TODO: Add your update logic here
+            KeyboardState state = Keyboard.GetState();
+            if (state.IsKeyDown(Keys.Down))
+            {
+                leftPaddle.Y += MOVEMENT;
+            }
+            else if (state.IsKeyDown(Keys.Up))
+            {
+                leftPaddle.Y -= MOVEMENT;
+            }
+            if (state.IsKeyDown(Keys.W))
+            {
+                rightPaddle.Y -= MOVEMENT;
+            }
+            else if (state.IsKeyDown(Keys.S))
+            {
+                rightPaddle.Y += MOVEMENT;
+            }
 
             base.Update(gameTime);
         }
@@ -81,13 +107,13 @@ namespace Pong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(left_paddle, new Rectangle(0, 0, left_paddle.Width, left_paddle.Height), Color.White);
-            spriteBatch.Draw(right_paddle, new Rectangle(graphics.PreferredBackBufferWidth - right_paddle.Width, 0, right_paddle.Width, right_paddle.Height), Color.White);
-            spriteBatch.Draw(ball, new Rectangle(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2, ball.Width, ball.Height), Color.White);
+            spriteBatch.Draw(leftPaddle.texture, new Rectangle((int)leftPaddle.X, (int)leftPaddle.Y, leftPaddle.texture.Width, leftPaddle.texture.Height), Color.White);
+            spriteBatch.Draw(rightPaddle.texture, new Rectangle((int)rightPaddle.X, (int)rightPaddle.Y, rightPaddle.texture.Width, rightPaddle.texture.Height), Color.White);
+            spriteBatch.Draw(ball.texture, new Rectangle((int)ball.X, (int)ball.Y, ball.texture.Width, ball.texture.Height), Color.White);
             spriteBatch.End();
             
 
