@@ -12,6 +12,10 @@ namespace Pong
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        private Texture2D left_paddle;
+        private Texture2D right_paddle;
+        private Texture2D ball;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -41,6 +45,10 @@ namespace Pong
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            left_paddle = Content.Load<Texture2D>("Pong_graphics/left_paddle");
+            right_paddle = Content.Load<Texture2D>("Pong_graphics/right_paddle");
+            ball = Content.Load<Texture2D>("Pong_graphics/ball");
         }
 
         /// <summary>
@@ -76,6 +84,12 @@ namespace Pong
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(left_paddle, new Rectangle(0, 0, left_paddle.Width, left_paddle.Height), Color.White);
+            spriteBatch.Draw(right_paddle, new Rectangle(graphics.PreferredBackBufferWidth - right_paddle.Width, 0, right_paddle.Width, right_paddle.Height), Color.White);
+            spriteBatch.Draw(ball, new Rectangle(graphics.PreferredBackBufferWidth / 2, graphics.PreferredBackBufferHeight / 2, ball.Width, ball.Height), Color.White);
+            spriteBatch.End();
+            
 
             base.Draw(gameTime);
         }
